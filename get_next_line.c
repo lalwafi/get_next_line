@@ -6,13 +6,13 @@
 /*   By: lalwafi <lalwafi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 10:25:24 by lalwafi           #+#    #+#             */
-/*   Updated: 2024/04/18 13:46:03 by lalwafi          ###   ########.fr       */
+/*   Updated: 2024/05/06 19:42:42 by lalwafi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_save(char	*buffer)
+char	*ft_save(char *buffer)
 {
 	char	*new_buffer;
 	int		i;
@@ -30,8 +30,9 @@ char	*ft_save(char	*buffer)
 	new_buffer = (char *)malloc(sizeof(char) * (ft_strlen(buffer) - i + 1));
 	if (!new_buffer)
 		return (NULL);
-	while (buffer[i])
+	while (buffer[++i])
 		new_buffer[j++] = buffer[i];
+	new_buffer[j] = 0;
 	free(buffer);
 	return (new_buffer);
 }
@@ -54,8 +55,8 @@ char	*ft_thing_to_print(char *buffer)
 		i++;
 	}
 	if (buffer[i] == '\n')
-		thing_to_print[i] = '\n';
-	thing_to_print[i + 1] = '\0';
+		thing_to_print[i++] = '\n';
+	thing_to_print[i] = '\0';
 	return (thing_to_print);
 }
 
@@ -67,7 +68,7 @@ char	*ft_read_it(char *buffer, int fd)
 	line = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!line)
 		return (NULL);
-	read_return = read(fd, line, BUFFER_SIZE);
+	read_return = 1;
 	while (read_return != 0 && ft_strchr(line, '\n') == 0)
 	{
 		read_return = read(fd, line, BUFFER_SIZE);
@@ -80,12 +81,11 @@ char	*ft_read_it(char *buffer, int fd)
 		}
 		else if (read_return != 0)
 		{
-			line[read_return] = '\0';
+			line[read_return + 1] = '\0';
 			buffer = ft_strjoin(buffer, line);
-			free(line);
 		}
+		free(line);
 	}
-	free(line);
 	return (buffer);
 }
 
@@ -94,9 +94,10 @@ char	*get_next_line(int fd)
 	static char	*buffer;
 	char		*thing_to_print;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE >= INT_MAX)
 		return (NULL);
-	buffer = NULL;
+	if (!buffer)
+		buffer = NULL;
 	buffer = ft_read_it(buffer, fd);
 	if (!buffer)
 		return (NULL);
@@ -110,13 +111,13 @@ char	*get_next_line(int fd)
 // {
 // 	int		fd;
 // 	char	*line;
-// 	int		lines;
+// 	int		number;
 
-// 	lines = 0;
+// 	number = 0;
 // 	fd = open("idk.txt", O_RDONLY);
 // 	if (fd == -1)
 // 		printf("lmao nah -1");
 // 	while ((line = get_next_line(fd)))
-// 		printf("%d - %s\n", lines + 1, line);
+// 		printf("%d - %s\n", (number + 1), line);
 // 	close(fd);
 // }

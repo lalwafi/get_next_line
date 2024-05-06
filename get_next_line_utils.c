@@ -6,26 +6,31 @@
 /*   By: lalwafi <lalwafi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 10:35:39 by lalwafi           #+#    #+#             */
-/*   Updated: 2024/04/18 13:49:16 by lalwafi          ###   ########.fr       */
+/*   Updated: 2024/05/06 19:34:11 by lalwafi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strchr(const char *line, int c)
+int	ft_strchr(char *line, int c)
 {
+	int	i;
+
+	i = 0;
 	if (!line)
-		return (NULL);
-	while (*line != '\0')
+		return (0);
+	if (c == 0)
+		return (0);
+	while (line[i])
 	{
-		if (*line == (char)c)
-			return ((char *)line);
-		line++;
+		if (line[i] == (char)c)
+			return (1);
+		i++;
 	}
-	return (NULL);
+	return (0);
 }
 
-char	*ft_strjoin(char const *buffer, char const *line)
+char	*ft_strjoin(char *buffer, char *line)
 {
 	size_t	i;
 	size_t	j;
@@ -33,6 +38,11 @@ char	*ft_strjoin(char const *buffer, char const *line)
 
 	i = 0;
 	j = 0;
+	if (!buffer)
+	{
+		buffer = malloc(sizeof(char) * 1);
+		buffer[0] = '\0';
+	}
 	if (!buffer && !line)
 		return (NULL);
 	new = (char *)malloc(sizeof(char) * (ft_strlen(buffer) + ft_strlen(line) + 1));
@@ -44,12 +54,10 @@ char	*ft_strjoin(char const *buffer, char const *line)
 		i++;
 	}
 	while (line[j])
-	{
-		new[i] = line[j];
-		i++;
-		j++;
-	}
+		new[i++] = line[j++];
 	new[i] = '\0';
+	if (buffer)
+		free(buffer);
 	return (new);
 }
 
