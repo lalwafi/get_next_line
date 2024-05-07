@@ -6,13 +6,13 @@
 /*   By: lalwafi <lalwafi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 10:35:39 by lalwafi           #+#    #+#             */
-/*   Updated: 2024/05/06 19:34:11 by lalwafi          ###   ########.fr       */
+/*   Updated: 2024/05/07 20:55:47 by lalwafi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	ft_strchr(char *line, int c)
+char	*ft_strchr(char *line, int c)
 {
 	int	i;
 
@@ -24,7 +24,7 @@ int	ft_strchr(char *line, int c)
 	while (line[i])
 	{
 		if (line[i] == (char)c)
-			return (1);
+			return (&line[i]);
 		i++;
 	}
 	return (0);
@@ -57,7 +57,7 @@ char	*ft_strjoin(char *buffer, char *line)
 		new[i++] = line[j++];
 	new[i] = '\0';
 	if (buffer)
-		free(buffer);
+		free(buffer); //isnt supposed to free??
 	return (new);
 }
 

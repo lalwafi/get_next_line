@@ -6,7 +6,7 @@
 /*   By: lalwafi <lalwafi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 10:25:24 by lalwafi           #+#    #+#             */
-/*   Updated: 2024/05/06 19:42:42 by lalwafi          ###   ########.fr       */
+/*   Updated: 2024/05/07 20:56:18 by lalwafi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ char	*ft_thing_to_print(char *buffer)
 	int		i;
 
 	i = 0;
+	if (!buffer[i])
+		return (NULL);
 	while (buffer[i] && buffer[i] != '\n')
 		i++;
 	thing_to_print = (char *)malloc(sizeof(char) * (i + 1 + (buffer[i] == '\n')));
@@ -69,7 +71,7 @@ char	*ft_read_it(char *buffer, int fd)
 	if (!line)
 		return (NULL);
 	read_return = 1;
-	while (read_return != 0 && ft_strchr(line, '\n') == 0)
+	while (read_return != 0 && ft_strchr(buffer, '\n') == 0)
 	{
 		read_return = read(fd, line, BUFFER_SIZE);
 		if (read_return == -1)
@@ -79,13 +81,10 @@ char	*ft_read_it(char *buffer, int fd)
 			free(line);
 			return (NULL);
 		}
-		else if (read_return != 0)
-		{
-			line[read_return + 1] = '\0';
-			buffer = ft_strjoin(buffer, line);
-		}
-		free(line);
+		line[read_return] = '\0';
+		buffer = ft_strjoin(buffer, line);
 	}
+	free(line);
 	return (buffer);
 }
 
@@ -118,6 +117,6 @@ char	*get_next_line(int fd)
 // 	if (fd == -1)
 // 		printf("lmao nah -1");
 // 	while ((line = get_next_line(fd)))
-// 		printf("%d - %s\n", (number + 1), line);
+// 		printf("%s", line);
 // 	close(fd);
 // }
